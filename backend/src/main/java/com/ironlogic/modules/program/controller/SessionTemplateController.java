@@ -2,6 +2,7 @@ package com.ironlogic.modules.program.controller;
 
 import com.ironlogic.common.api.ApiResponse;
 import com.ironlogic.modules.program.application.ProgramApplicationService;
+import com.ironlogic.modules.program.dto.CopySessionTemplateRequest;
 import com.ironlogic.modules.program.dto.CreateSessionTemplateRequest;
 import com.ironlogic.modules.program.dto.SessionTemplateResponse;
 import com.ironlogic.modules.program.dto.UpdateSessionTemplateRequest;
@@ -48,6 +49,15 @@ public class SessionTemplateController {
             @Valid @RequestBody UpdateSessionTemplateRequest request
     ) {
         return ApiResponse.success(programApplicationService.updateSessionTemplate(currentUserId(), id, request));
+    }
+
+    /** 复制一个属于当前用户 Program 层级的 SessionTemplate。 */
+    @PostMapping("/api/session-templates/{id}/copy")
+    public ApiResponse<SessionTemplateResponse> copySessionTemplate(
+            @PathVariable Long id,
+            @Valid @RequestBody CopySessionTemplateRequest request
+    ) {
+        return ApiResponse.success(programApplicationService.copySessionTemplate(currentUserId(), id, request));
     }
 
     private Long currentUserId() {

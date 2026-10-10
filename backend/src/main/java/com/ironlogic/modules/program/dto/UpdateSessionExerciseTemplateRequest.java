@@ -1,8 +1,10 @@
 package com.ironlogic.modules.program.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Request DTO for updating a SessionExerciseTemplate.
@@ -17,6 +19,7 @@ import java.math.BigDecimal;
  * @param intensityMode updated intensity mode
  * @param progressionRuleId updated progression rule id
  * @param prescriptionJson updated prescription json
+ * @param prescriptionSegments updated multi-segment prescription definition
  */
 public record UpdateSessionExerciseTemplateRequest(
         /** Updated referenced exercise id. */
@@ -52,6 +55,9 @@ public record UpdateSessionExerciseTemplateRequest(
         Long progressionRuleId,
 
         /** Updated prescription json. */
-        String prescriptionJson
+        String prescriptionJson,
+
+        /** 更新后的多段处方列表。 */
+        List<@Valid SessionExercisePrescriptionSegmentRequest> prescriptionSegments
 ) {
 }

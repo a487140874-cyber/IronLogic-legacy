@@ -2,6 +2,7 @@ package com.ironlogic.modules.program.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Response DTO for SessionExerciseTemplate APIs.
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
  * @param intensityMode intensity mode
  * @param progressionRuleId optional progression rule id
  * @param prescriptionJson prescription json
+ * @param prescriptionSegments structured prescription segments
  * @param createdAt creation time
  * @param updatedAt update time
  */
@@ -34,6 +36,7 @@ public record SessionExerciseTemplateResponse(
         String intensityMode,
         Long progressionRuleId,
         String prescriptionJson,
+        List<SessionExercisePrescriptionSegmentResponse> prescriptionSegments,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {

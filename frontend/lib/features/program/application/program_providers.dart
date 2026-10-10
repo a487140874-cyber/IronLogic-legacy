@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../domain/model/copy_program_block_input.dart';
+import '../domain/model/copy_session_template_input.dart';
 import '../data/api/program_api.dart';
 import '../data/repository/program_repository_impl.dart';
 import '../domain/model/create_program_input.dart';
@@ -55,6 +57,56 @@ final sessionTemplateExercisesProvider =
       .listSessionExerciseTemplates(templateId);
 });
 
+/// 周视图里的单天数据。
+class ProgramWeekDayData {
+  /// 创建单天数据。
+  const ProgramWeekDayData({
+    required this.template,
+    required this.exercises,
+  });
+
+  final SessionTemplate template;
+  final List<SessionExerciseTemplate> exercises;
+}
+
+/// 周视图里的单周数据。
+class ProgramWeekBlockData {
+  /// 创建单周数据。
+  const ProgramWeekBlockData({
+    required this.block,
+    required this.days,
+  });
+
+  final ProgramBlock block;
+  final List<ProgramWeekDayData> days;
+}
+
+/// Program 周视图数据。
+///
+/// 这个 Provider 属于 application 层，因为它把 Block、SessionTemplate、模板动作三层
+/// 结构重新编排成更接近训练者思维的“周 / 天视图”。
+final programWeekViewProvider =
+    FutureProvider.family<List<ProgramWeekBlockData>, int>((ref, programId) async {
+  final ProgramRepository repository = ref.watch(programRepositoryProvider);
+  final List<ProgramBlock> blocks = await repository.listProgramBlocks(programId);
+
+  final List<ProgramWeekBlockData> weeks = <ProgramWeekBlockData>[];
+  for (final ProgramBlock block in blocks) {
+    final List<SessionTemplate> templates = await repository.listSessionTemplates(
+      block.id,
+    );
+    final List<ProgramWeekDayData> days = <ProgramWeekDayData>[];
+    for (final SessionTemplate template in templates) {
+      final List<SessionExerciseTemplate> exercises =
+          await repository.listSessionExerciseTemplates(template.id);
+      days.add(ProgramWeekDayData(template: template, exercises: exercises));
+    }
+    weeks.add(ProgramWeekBlockData(block: block, days: days));
+  }
+
+  return weeks;
+});
+
 /// 创建 Program 的状态控制器。
 ///
 /// 该控制器属于 `program/application`，负责处理创建提交与列表刷新。
@@ -101,6 +153,27 @@ final programBlockCreateControllerProvider =
   ProgramBlockCreateController.new,
 );
 
+/// 复制 Block 的状态控制器。
+class ProgramBlockCopyController extends AutoDisposeFamilyAsyncNotifier<void, int> {
+  @override
+  FutureOr<void> build(int arg) {}
+
+  /// 提交复制请求。
+  Future<void> submit(CopyProgramBlockInput input) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final int blockId = arg;
+      await ref.read(programRepositoryProvider).copyProgramBlock(blockId, input);
+    });
+  }
+}
+
+/// 复制 Block 控制器 Provider。
+final programBlockCopyControllerProvider =
+    AutoDisposeAsyncNotifierProviderFamily<ProgramBlockCopyController, void, int>(
+  ProgramBlockCopyController.new,
+);
+
 /// 创建 SessionTemplate 的状态控制器。
 class SessionTemplateCreateController
     extends AutoDisposeFamilyAsyncNotifier<void, int> {
@@ -122,6 +195,31 @@ class SessionTemplateCreateController
 final sessionTemplateCreateControllerProvider =
     AutoDisposeAsyncNotifierProviderFamily<SessionTemplateCreateController, void, int>(
   SessionTemplateCreateController.new,
+);
+
+/// 复制 SessionTemplate 的状态控制器。
+class SessionTemplateCopyController
+    extends AutoDisposeFamilyAsyncNotifier<void, int> {
+  @override
+  FutureOr<void> build(int arg) {}
+
+  /// 提交复制请求。
+  Future<void> submit(CopySessionTemplateInput input) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final int templateId = arg;
+      await ref.read(programRepositoryProvider).copySessionTemplate(
+        templateId,
+        input,
+      );
+    });
+  }
+}
+
+/// 复制 SessionTemplate 控制器 Provider。
+final sessionTemplateCopyControllerProvider =
+    AutoDisposeAsyncNotifierProviderFamily<SessionTemplateCopyController, void, int>(
+  SessionTemplateCopyController.new,
 );
 
 /// 创建 SessionExerciseTemplate 的状态控制器。

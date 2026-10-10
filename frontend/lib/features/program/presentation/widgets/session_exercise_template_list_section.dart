@@ -42,12 +42,29 @@ class SessionExerciseTemplateListSection extends StatelessWidget {
             (SessionExerciseTemplate item) => Card(
               child: ListTile(
                 title: Text(exerciseNameOf(item.exerciseId)),
-                subtitle: Text(
-                  '顺序：${item.orderNo} · 组数：${item.targetSets} · 次数：${item.targetReps ?? '-'}\n'
-                  '重量：${item.targetWeight ?? '-'} ${item.targetWeightUnit ?? ''} · '
-                  '休息：${item.restSeconds ?? '-'} 秒',
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '顺序：${item.orderNo} · 组数：${item.targetSets} · 次数：${item.targetReps ?? '-'}',
+                    ),
+                    Text(
+                      '重量：${item.targetWeight ?? '-'} ${item.targetWeightUnit ?? ''} · '
+                      '休息：${item.restSeconds ?? '-'} 秒',
+                    ),
+                    const SizedBox(height: 8),
+                    ...item.prescriptionSegments.map(
+                      (segment) => Text(
+                        '段 ${segment.segmentOrderNo} ${segment.label ?? ''} · '
+                        '${segment.sets} 组 x ${segment.reps ?? '-'} 次'
+                        '${segment.loadPrescriptionType != null ? ' · ${segment.loadPrescriptionType}' : ''}'
+                        '${segment.targetWeight != null ? ' · ${segment.targetWeight}kg' : ''}'
+                        '${segment.percentageValue != null ? ' · ${segment.percentageValue}%' : ''}',
+                      ),
+                    ),
+                  ],
                 ),
-                isThreeLine: true,
+                isThreeLine: false,
               ),
             ),
           )

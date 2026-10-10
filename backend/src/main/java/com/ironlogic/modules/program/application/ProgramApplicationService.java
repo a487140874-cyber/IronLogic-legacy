@@ -4,6 +4,8 @@ import com.ironlogic.modules.program.dto.CreateProgramBlockRequest;
 import com.ironlogic.modules.program.dto.CreateProgramRequest;
 import com.ironlogic.modules.program.dto.CreateSessionExerciseTemplateRequest;
 import com.ironlogic.modules.program.dto.CreateSessionTemplateRequest;
+import com.ironlogic.modules.program.dto.CopyProgramBlockRequest;
+import com.ironlogic.modules.program.dto.CopySessionTemplateRequest;
 import com.ironlogic.modules.program.dto.ProgramBlockResponse;
 import com.ironlogic.modules.program.dto.ProgramResponse;
 import com.ironlogic.modules.program.dto.SessionExerciseTemplateResponse;
@@ -44,6 +46,9 @@ public interface ProgramApplicationService {
     /** 更新一个属于当前用户 Program 层级的 ProgramBlock。 */
     ProgramBlockResponse updateProgramBlock(Long userId, Long blockId, UpdateProgramBlockRequest request);
 
+    /** 深拷贝一个 ProgramBlock 到同一个 Program 下。 */
+    ProgramBlockResponse copyProgramBlock(Long userId, Long blockId, CopyProgramBlockRequest request);
+
     /** 在指定 ProgramBlock 下创建 SessionTemplate。 */
     SessionTemplateResponse createSessionTemplate(Long userId, Long blockId, CreateSessionTemplateRequest request);
 
@@ -52,6 +57,9 @@ public interface ProgramApplicationService {
 
     /** 更新一个属于当前用户 Program 层级的 SessionTemplate。 */
     SessionTemplateResponse updateSessionTemplate(Long userId, Long templateId, UpdateSessionTemplateRequest request);
+
+    /** 复制一个 SessionTemplate 到同一个 Block 下。 */
+    SessionTemplateResponse copySessionTemplate(Long userId, Long templateId, CopySessionTemplateRequest request);
 
     /** 在指定 SessionTemplate 下创建 SessionExerciseTemplate。 */
     SessionExerciseTemplateResponse createSessionExerciseTemplate(

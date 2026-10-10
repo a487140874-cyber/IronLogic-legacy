@@ -2,6 +2,7 @@ package com.ironlogic.modules.program.controller;
 
 import com.ironlogic.common.api.ApiResponse;
 import com.ironlogic.modules.program.application.ProgramApplicationService;
+import com.ironlogic.modules.program.dto.CopyProgramBlockRequest;
 import com.ironlogic.modules.program.dto.CreateProgramBlockRequest;
 import com.ironlogic.modules.program.dto.ProgramBlockResponse;
 import com.ironlogic.modules.program.dto.UpdateProgramBlockRequest;
@@ -49,6 +50,15 @@ public class ProgramBlockController {
             @Valid @RequestBody UpdateProgramBlockRequest request
     ) {
         return ApiResponse.success(programApplicationService.updateProgramBlock(currentUserId(), id, request));
+    }
+
+    /** 深拷贝一个 Block 到同一个 Program 下。 */
+    @PostMapping("/api/blocks/{id}/copy")
+    public ApiResponse<ProgramBlockResponse> copyProgramBlock(
+            @PathVariable Long id,
+            @Valid @RequestBody CopyProgramBlockRequest request
+    ) {
+        return ApiResponse.success(programApplicationService.copyProgramBlock(currentUserId(), id, request));
     }
 
     private Long currentUserId() {

@@ -1,4 +1,5 @@
 import '../../domain/model/session_exercise_template.dart';
+import 'session_exercise_prescription_segment_dto.dart';
 
 /// SessionExerciseTemplate DTO。
 ///
@@ -18,6 +19,7 @@ class SessionExerciseTemplateDto {
     this.intensityMode,
     this.progressionRuleId,
     this.prescriptionJson,
+    this.prescriptionSegments = const <SessionExercisePrescriptionSegmentDto>[],
     this.createdAt,
     this.updatedAt,
   });
@@ -37,6 +39,14 @@ class SessionExerciseTemplateDto {
       intensityMode: json['intensityMode']?.toString(),
       progressionRuleId: (json['progressionRuleId'] as num?)?.toInt(),
       prescriptionJson: json['prescriptionJson']?.toString(),
+      prescriptionSegments:
+          (json['prescriptionSegments'] as List<dynamic>? ?? <dynamic>[])
+              .map(
+                (dynamic item) => SessionExercisePrescriptionSegmentDto.fromJson(
+                  item as Map<String, dynamic>,
+                ),
+              )
+              .toList(),
       createdAt: DateTime.tryParse(json['createdAt']?.toString() ?? ''),
       updatedAt: DateTime.tryParse(json['updatedAt']?.toString() ?? ''),
     );
@@ -54,6 +64,7 @@ class SessionExerciseTemplateDto {
   final String? intensityMode;
   final int? progressionRuleId;
   final String? prescriptionJson;
+  final List<SessionExercisePrescriptionSegmentDto> prescriptionSegments;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -72,6 +83,9 @@ class SessionExerciseTemplateDto {
       intensityMode: intensityMode,
       progressionRuleId: progressionRuleId,
       prescriptionJson: prescriptionJson,
+      prescriptionSegments: prescriptionSegments
+          .map((SessionExercisePrescriptionSegmentDto item) => item.toDomain())
+          .toList(),
       createdAt: createdAt,
       updatedAt: updatedAt,
     );

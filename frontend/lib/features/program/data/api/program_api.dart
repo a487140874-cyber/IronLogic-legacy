@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/dio_client.dart';
+import '../dto/copy_program_block_request_dto.dart';
+import '../dto/copy_session_template_request_dto.dart';
 import '../dto/create_program_block_request_dto.dart';
 import '../dto/create_program_request_dto.dart';
 import '../dto/create_session_exercise_template_request_dto.dart';
@@ -79,6 +81,20 @@ class ProgramApi {
     });
   }
 
+  /// 调用 `POST /api/blocks/{id}/copy` 复制 Block。
+  Future<ProgramBlockDto> copyProgramBlock(
+    int blockId,
+    CopyProgramBlockRequestDto request,
+  ) async {
+    final Response<dynamic> response = await _dio.post(
+      '/api/blocks/$blockId/copy',
+      data: request.toJson(),
+    );
+    return unwrapApiData<ProgramBlockDto>(response, (Object? data) {
+      return ProgramBlockDto.fromJson(data as Map<String, dynamic>);
+    });
+  }
+
   /// 调用 `GET /api/blocks/{blockId}/session-templates` 获取模板列表。
   Future<List<SessionTemplateDto>> listSessionTemplates(int blockId) async {
     final Response<dynamic> response =
@@ -101,6 +117,20 @@ class ProgramApi {
   ) async {
     final Response<dynamic> response = await _dio.post(
       '/api/blocks/$blockId/session-templates',
+      data: request.toJson(),
+    );
+    return unwrapApiData<SessionTemplateDto>(response, (Object? data) {
+      return SessionTemplateDto.fromJson(data as Map<String, dynamic>);
+    });
+  }
+
+  /// 调用 `POST /api/session-templates/{id}/copy` 复制 SessionTemplate。
+  Future<SessionTemplateDto> copySessionTemplate(
+    int templateId,
+    CopySessionTemplateRequestDto request,
+  ) async {
+    final Response<dynamic> response = await _dio.post(
+      '/api/session-templates/$templateId/copy',
       data: request.toJson(),
     );
     return unwrapApiData<SessionTemplateDto>(response, (Object? data) {

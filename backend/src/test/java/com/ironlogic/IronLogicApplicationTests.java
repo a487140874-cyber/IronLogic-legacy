@@ -3,6 +3,7 @@ package com.ironlogic;
 import com.ironlogic.modules.exercise.infrastructure.persistence.mapper.ExerciseMapper;
 import com.ironlogic.modules.program.infrastructure.persistence.mapper.ProgramBlockMapper;
 import com.ironlogic.modules.program.infrastructure.persistence.mapper.ProgramMapper;
+import com.ironlogic.modules.program.infrastructure.persistence.mapper.SessionExercisePrescriptionSegmentMapper;
 import com.ironlogic.modules.program.infrastructure.persistence.mapper.SessionExerciseTemplateMapper;
 import com.ironlogic.modules.program.infrastructure.persistence.mapper.SessionTemplateMapper;
 import com.ironlogic.modules.progression.infrastructure.persistence.mapper.ProgramProgressMapper;
@@ -35,6 +36,9 @@ class IronLogicApplicationTests {
 
     @MockBean
     private SessionExerciseTemplateMapper sessionExerciseTemplateMapper;
+
+    @MockBean
+    private SessionExercisePrescriptionSegmentMapper sessionExercisePrescriptionSegmentMapper;
 
     @MockBean
     private ProgramProgressMapper programProgressMapper;

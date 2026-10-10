@@ -1,3 +1,5 @@
+import '../model/copy_program_block_input.dart';
+import '../model/copy_session_template_input.dart';
 import '../model/create_program_input.dart';
 import '../model/create_program_block_input.dart';
 import '../model/create_session_exercise_template_input.dart';
@@ -29,6 +31,9 @@ abstract class ProgramRepository {
     CreateProgramBlockInput input,
   );
 
+  /// 复制一个 Block。
+  Future<ProgramBlock> copyProgramBlock(int blockId, CopyProgramBlockInput input);
+
   /// 查询指定 Block 下的 SessionTemplate 列表。
   Future<List<SessionTemplate>> listSessionTemplates(int blockId);
 
@@ -36,6 +41,12 @@ abstract class ProgramRepository {
   Future<SessionTemplate> createSessionTemplate(
     int blockId,
     CreateSessionTemplateInput input,
+  );
+
+  /// 复制一个 SessionTemplate。
+  Future<SessionTemplate> copySessionTemplate(
+    int templateId,
+    CopySessionTemplateInput input,
   );
 
   /// 查询指定 SessionTemplate 下的模板动作列表。

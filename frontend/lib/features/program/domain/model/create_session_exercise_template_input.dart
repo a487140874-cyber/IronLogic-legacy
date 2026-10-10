@@ -1,3 +1,5 @@
+import 'session_exercise_prescription_segment_input.dart';
+
 /// 创建 SessionExerciseTemplate 的输入模型。
 ///
 /// 该类属于 `program/domain`，承接模板动作创建页的表单输入。
@@ -13,6 +15,7 @@ class CreateSessionExerciseTemplateInput {
     this.restSeconds,
     this.intensityMode,
     this.prescriptionJson = '{}',
+    this.prescriptionSegments = const <SessionExercisePrescriptionSegmentInput>[],
   });
 
   /// Exercise id。
@@ -41,4 +44,7 @@ class CreateSessionExerciseTemplateInput {
 
   /// 处方 JSON。
   final String prescriptionJson;
+
+  /// 结构化多段处方。
+  final List<SessionExercisePrescriptionSegmentInput> prescriptionSegments;
 }

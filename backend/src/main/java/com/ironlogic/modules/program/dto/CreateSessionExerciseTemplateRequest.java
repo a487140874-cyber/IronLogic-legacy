@@ -1,8 +1,10 @@
 package com.ironlogic.modules.program.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Request DTO for creating a SessionExerciseTemplate.
@@ -17,6 +19,7 @@ import java.math.BigDecimal;
  * @param intensityMode optional intensity mode
  * @param progressionRuleId optional future progression rule id
  * @param prescriptionJson optional prescription json
+ * @param prescriptionSegments optional multi-segment prescription definition
  */
 public record CreateSessionExerciseTemplateRequest(
         /** Referenced exercise id; must exist and be visible to current user. */
@@ -52,6 +55,9 @@ public record CreateSessionExerciseTemplateRequest(
         Long progressionRuleId,
 
         /** Optional prescription json. */
-        String prescriptionJson
+        String prescriptionJson,
+
+        /** 可选多段处方。前端未传时，仍兼容旧的单段字段模式。 */
+        List<@Valid SessionExercisePrescriptionSegmentRequest> prescriptionSegments
 ) {
 }

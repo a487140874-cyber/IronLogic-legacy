@@ -1,3 +1,5 @@
+import 'session_exercise_prescription_segment.dart';
+
 /// SessionExerciseTemplate 领域模型。
 ///
 /// 该类属于 `program/domain`，表示训练模板中的一个动作处方。
@@ -17,6 +19,7 @@ class SessionExerciseTemplate {
     this.intensityMode,
     this.progressionRuleId,
     this.prescriptionJson,
+    this.prescriptionSegments = const <SessionExercisePrescriptionSegment>[],
     this.createdAt,
     this.updatedAt,
   });
@@ -56,6 +59,12 @@ class SessionExerciseTemplate {
 
   /// 预留处方 JSON。
   final String? prescriptionJson;
+
+  /// 结构化处方段。
+  ///
+  /// 旧数据即使没有落库 segment，后端也会返回一个兼容用默认段，
+  /// 这样前端展示层可以统一按“多段处方”来渲染。
+  final List<SessionExercisePrescriptionSegment> prescriptionSegments;
 
   /// 创建时间。
   final DateTime? createdAt;

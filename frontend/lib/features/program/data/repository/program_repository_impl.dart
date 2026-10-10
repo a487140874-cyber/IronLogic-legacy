@@ -1,3 +1,5 @@
+import '../../domain/model/copy_program_block_input.dart';
+import '../../domain/model/copy_session_template_input.dart';
 import '../../domain/model/create_program_input.dart';
 import '../../domain/model/create_program_block_input.dart';
 import '../../domain/model/create_session_exercise_template_input.dart';
@@ -8,6 +10,8 @@ import '../../domain/model/session_exercise_template.dart';
 import '../../domain/model/session_template.dart';
 import '../../domain/repository/program_repository.dart';
 import '../api/program_api.dart';
+import '../dto/copy_program_block_request_dto.dart';
+import '../dto/copy_session_template_request_dto.dart';
 import '../dto/create_program_block_request_dto.dart';
 import '../dto/create_program_request_dto.dart';
 import '../dto/create_session_exercise_template_request_dto.dart';
@@ -64,6 +68,17 @@ class ProgramRepositoryImpl implements ProgramRepository {
   }
 
   @override
+  Future<ProgramBlock> copyProgramBlock(
+    int blockId,
+    CopyProgramBlockInput input,
+  ) async {
+    final CopyProgramBlockRequestDto request =
+        CopyProgramBlockRequestDto.fromInput(input);
+    final ProgramBlockDto dto = await _api.copyProgramBlock(blockId, request);
+    return dto.toDomain();
+  }
+
+  @override
   Future<List<SessionTemplate>> listSessionTemplates(int blockId) async {
     final List<SessionTemplateDto> items = await _api.listSessionTemplates(
       blockId,
@@ -80,6 +95,20 @@ class ProgramRepositoryImpl implements ProgramRepository {
         CreateSessionTemplateRequestDto.fromInput(input);
     final SessionTemplateDto dto = await _api.createSessionTemplate(
       blockId,
+      request,
+    );
+    return dto.toDomain();
+  }
+
+  @override
+  Future<SessionTemplate> copySessionTemplate(
+    int templateId,
+    CopySessionTemplateInput input,
+  ) async {
+    final CopySessionTemplateRequestDto request =
+        CopySessionTemplateRequestDto.fromInput(input);
+    final SessionTemplateDto dto = await _api.copySessionTemplate(
+      templateId,
       request,
     );
     return dto.toDomain();

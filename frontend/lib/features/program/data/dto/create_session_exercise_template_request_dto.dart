@@ -1,4 +1,5 @@
 import '../../domain/model/create_session_exercise_template_input.dart';
+import 'session_exercise_prescription_segment_request_dto.dart';
 
 /// 创建 SessionExerciseTemplate 的请求 DTO。
 ///
@@ -15,6 +16,7 @@ class CreateSessionExerciseTemplateRequestDto {
     this.restSeconds,
     this.intensityMode,
     required this.prescriptionJson,
+    required this.prescriptionSegments,
   });
 
   /// 从领域输入构建请求 DTO。
@@ -31,6 +33,9 @@ class CreateSessionExerciseTemplateRequestDto {
       restSeconds: input.restSeconds,
       intensityMode: input.intensityMode,
       prescriptionJson: input.prescriptionJson,
+      prescriptionSegments: input.prescriptionSegments
+          .map(SessionExercisePrescriptionSegmentRequestDto.fromInput)
+          .toList(),
     );
   }
 
@@ -43,6 +48,7 @@ class CreateSessionExerciseTemplateRequestDto {
   final int? restSeconds;
   final String? intensityMode;
   final String prescriptionJson;
+  final List<SessionExercisePrescriptionSegmentRequestDto> prescriptionSegments;
 
   /// 转为 JSON。
   Map<String, dynamic> toJson() {
@@ -57,6 +63,9 @@ class CreateSessionExerciseTemplateRequestDto {
       'intensityMode': intensityMode,
       'progressionRuleId': null,
       'prescriptionJson': prescriptionJson,
+      'prescriptionSegments': prescriptionSegments
+          .map((SessionExercisePrescriptionSegmentRequestDto item) => item.toJson())
+          .toList(),
     };
   }
 }
